@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzq.mapper.shoplocalMapper">
+  <resultMap id="BaseResultMap" type="com.zzq.entity.shoplocal">
+    <id column="localid" jdbcType="INTEGER" property="localid" />
+    <result column="shopinglocal" jdbcType="VARCHAR" property="shopinglocal" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    localid, shopinglocal
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from shoplocal
+    where localid = #{localid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from shoplocal
+    where localid = #{localid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zzq.entity.shoplocal">
+    insert into shoplocal (localid, shopinglocal)
+    values (#{localid,jdbcType=INTEGER}, #{shopinglocal,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zzq.entity.shoplocal">
+    insert into shoplocal
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="localid != null">
+        localid,
+      </if>
+      <if test="shopinglocal != null">
+        shopinglocal,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="localid != null">
+        #{localid,jdbcType=INTEGER},
+      </if>
+      <if test="shopinglocal != null">
+        #{shopinglocal,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zzq.entity.shoplocal">
+    update shoplocal
+    <set>
+      <if test="shopinglocal != null">
+        shopinglocal = #{shopinglocal,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where localid = #{localid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zzq.entity.shoplocal">
+    update shoplocal
+    set shopinglocal = #{shopinglocal,jdbcType=VARCHAR}
+    where localid = #{localid,jdbcType=INTEGER}
+  </update>
+</mapper>

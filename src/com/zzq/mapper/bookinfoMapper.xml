@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzq.mapper.bookinfoMapper">
+  <resultMap id="BaseResultMap" type="com.zzq.entity.userbookinfo">
+    <id column="bookid" jdbcType="INTEGER" property="bookid" />
+    <result column="bookname" jdbcType="VARCHAR" property="bookname" />
+    <result column="isgrounding" jdbcType="INTEGER" property="isgrounding" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="subdate" jdbcType="TIMESTAMP" property="subdate" />
+    <result column="classify" jdbcType="INTEGER" property="classify" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    bookid, bookname, isgrounding, price, subdate, classify
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from bookinfo
+    where bookid = #{bookid,jdbcType=INTEGER}
+  </select>
+  
+   <select id="userselectAllBookList" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from bookinfo
+    <where>
+     <if test="classid!=null">
+     and classify = #{classid}
+    </if>
+     
+    <if test="bookname!=null and bookname!=''">
+     and bookname like'%${bookname}%'
+    </if>
+     and isgrounding =1
+    </where>
+   
+    ORDER by subdate desc
+  </select>
+  
+   <select id="superselectAllBookList" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from bookinfo
+    <where>
+    <if test="bookname!=null and bookname!=''">
+     bookname like '% ${bookname} %'
+    </if>
+    <if test="classid!=null">
+     and classify = #{classid}
+    </if>
+    </where>
+    
+    ORDER by subdate desc
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from bookinfo
+    where bookid = #{bookid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zzq.entity.bookinfo">
+    insert into bookinfo (bookid, bookname, isgrounding, 
+      price, subdate, classify
+      )
+    values (#{bookid,jdbcType=INTEGER}, #{bookname,jdbcType=VARCHAR}, #{isgrounding,jdbcType=INTEGER}, 
+      #{price,jdbcType=DOUBLE}, #{subdate,jdbcType=TIMESTAMP}, #{classify,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zzq.entity.bookinfo">
+    insert into bookinfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bookid != null">
+        bookid,
+      </if>
+      <if test="bookname != null">
+        bookname,
+      </if>
+      <if test="isgrounding != null">
+        isgrounding,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="subdate != null">
+        subdate,
+      </if>
+      <if test="classify != null">
+        classify,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bookid != null">
+        #{bookid,jdbcType=INTEGER},
+      </if>
+      <if test="bookname != null">
+        #{bookname,jdbcType=VARCHAR},
+      </if>
+      <if test="isgrounding != null">
+        #{isgrounding,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="subdate != null">
+        #{subdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="classify != null">
+        #{classify,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zzq.entity.bookinfo">
+    update bookinfo
+    <set>
+      <if test="bookname != null">
+        bookname = #{bookname,jdbcType=VARCHAR},
+      </if>
+      <if test="isgrounding != null">
+        isgrounding = #{isgrounding,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="subdate != null">
+        subdate = #{subdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="classify != null">
+        classify = #{classify,jdbcType=INTEGER},
+      </if>
+    </set>
+    where bookid = #{bookid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zzq.entity.bookinfo">
+    update bookinfo
+    set bookname = #{bookname,jdbcType=VARCHAR},
+      isgrounding = #{isgrounding,jdbcType=INTEGER},
+      price = #{price,jdbcType=DOUBLE},
+      subdate = #{subdate,jdbcType=TIMESTAMP},
+      classify = #{classify,jdbcType=INTEGER}
+    where bookid = #{bookid,jdbcType=INTEGER}
+  </update>
+</mapper>

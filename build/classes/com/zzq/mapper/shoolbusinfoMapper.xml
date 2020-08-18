@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzq.mapper.shoolbusinfoMapper">
+  <resultMap id="BaseResultMap" type="com.zzq.entity.userschoolbusinfo">
+    <id column="lineid" jdbcType="INTEGER" property="lineid" />
+    <result column="starttime" jdbcType="VARCHAR" property="starttime" />
+    <result column="start" jdbcType="VARCHAR" property="start" />
+    <result column="end" jdbcType="VARCHAR" property="end" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    lineid, starttime, start, end,price
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from shoolbusinfo
+    where lineid = #{lineid,jdbcType=INTEGER}
+  </select>
+  
+   <select id="userselectAllbusList" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from shoolbusinfo
+    <where> 
+    <if test="bustart!=null and bustart!=''">
+     and start like'%${bustart}%'
+    </if>
+    <if test="busend!=null and busend!=''">
+     and end like'%${busend}%'
+    </if>
+    </where>
+  </select>
+  
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from shoolbusinfo
+    where lineid = #{lineid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zzq.entity.shoolbusinfo">
+    insert into shoolbusinfo (lineid, starttime, start, price,
+      end)
+    values (#{lineid,jdbcType=INTEGER}, #{starttime,jdbcType=VARCHAR}, #{start,jdbcType=VARCHAR}, 
+      #{price,jdbcType=DOUBLE}), #{end,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zzq.entity.shoolbusinfo">
+    insert into shoolbusinfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="lineid != null">
+        lineid,
+      </if>
+      <if test="starttime != null">
+        starttime,
+      </if>
+      <if test="start != null">
+        start,
+      </if>
+      <if test="end != null">
+        end,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="lineid != null">
+        #{lineid,jdbcType=INTEGER},
+      </if>
+      <if test="starttime != null">
+        #{starttime,jdbcType=VARCHAR},
+      </if>
+      <if test="start != null">
+        #{start,jdbcType=VARCHAR},
+      </if>
+      <if test="end != null">
+        #{end,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zzq.entity.shoolbusinfo">
+    update shoolbusinfo
+    <set>
+      <if test="starttime != null">
+        starttime = #{starttime,jdbcType=VARCHAR},
+      </if>
+      <if test="start != null">
+        start = #{start,jdbcType=VARCHAR},
+      </if>
+      <if test="end != null">
+        end = #{end,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where lineid = #{lineid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zzq.entity.shoolbusinfo">
+    update shoolbusinfo
+    set starttime = #{starttime,jdbcType=VARCHAR},
+      start = #{start,jdbcType=VARCHAR},
+      end = #{end,jdbcType=VARCHAR}
+    where lineid = #{lineid,jdbcType=INTEGER}
+  </update>
+</mapper>

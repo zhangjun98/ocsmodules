@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzq.mapper.bussinfoMapper">
+  <resultMap id="BaseResultMap" type="com.zzq.entity.bussinfo">
+    <id column="actionid" jdbcType="INTEGER" property="actionid" />
+    <result column="localid" jdbcType="INTEGER" property="localid" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="actiontime" jdbcType="TIMESTAMP" property="actiontime" />
+    <result column="actionmoney" jdbcType="DOUBLE" property="actionmoney" />
+    <result column="blance" jdbcType="DOUBLE" property="blance" />
+    <result column="isdel" jdbcType="INTEGER" property="isdel" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    actionid, localid, userid, actiontime, actionmoney, isdel,blance
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from bussinfo
+    where actionid = #{actionid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="userselectBybussinfo" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from bussinfo
+    <where>
+     <if test="userid != null  and userid !=''">
+   	 userid = #{userid,jdbcType=INTEGER}
+    </if>
+    <if test="localid != null  and localid !=''">
+   	 and localid = #{localid,jdbcType=INTEGER}
+    </if>
+     and isdel =0
+    </where>
+    order by actiontime desc
+  </select>
+  
+   <select id="SuperuserselectALL" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from bussinfo
+   <where>
+     <if test="userid != null  and userid !=''">
+   	 userid = #{userid,jdbcType=INTEGER}
+    </if>
+    <if test="localid != null  and localid !=''">
+   	 and localid = #{localid,jdbcType=INTEGER}
+    </if>
+    </where>
+    order by actiontime desc
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from bussinfo
+    where actionid = #{actionid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zzq.entity.bussinfo">
+    insert into bussinfo (localid, userid, 
+      actiontime, actionmoney, blance
+      )
+    values ( #{localid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, 
+      #{actiontime,jdbcType=TIMESTAMP}, #{actionmoney,jdbcType=DOUBLE}, #{blance,jdbcType=DOUBLE}
+      )
+  </insert>
+  
+  <update id="updateByPrimaryKey" parameterType="com.zzq.entity.bussinfo">
+    update bussinfo
+    set localid = #{localid,jdbcType=INTEGER},
+      userid = #{userid,jdbcType=INTEGER},
+      actiontime = #{actiontime,jdbcType=TIMESTAMP},
+      actionmoney = #{actionmoney,jdbcType=DOUBLE},
+       blance = #{blance,jdbcType=DOUBLE},
+      isdel = #{isdel,jdbcType=INTEGER}
+    where actionid = #{actionid,jdbcType=INTEGER}
+  </update>
+   <update id="updateByUserdel" parameterType="com.zzq.entity.bussinfo">
+    update bussinfo
+    set 
+      isdel = #{isdel,jdbcType=INTEGER}
+    where actionid = #{actionid,jdbcType=INTEGER}
+  </update>
+</mapper>

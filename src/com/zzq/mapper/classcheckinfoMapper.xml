@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzq.mapper.classcheckinfoMapper">
+  <resultMap id="BaseResultMap" type="com.zzq.entity.classcheckinfo">
+    <id column="actionid" jdbcType="INTEGER" property="actionid" />
+    <result column="classid" jdbcType="INTEGER" property="classid" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="checktime" jdbcType="TIMESTAMP" property="checktime" />
+  </resultMap>
+  
+  <resultMap id="fullResultMap" type="com.zzq.entity.classcheckinfo">
+    <id column="actionid" jdbcType="INTEGER" property="actionid" />
+    <result column="classid" jdbcType="INTEGER" property="classid" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="checktime" jdbcType="TIMESTAMP" property="checktime" />
+     <result column="classname" jdbcType="VARCHAR" property="classname" />
+    <result column="classbegintime" jdbcType="TIME" property="classbegintime" />
+    <result column="classendtime" jdbcType="TIME" property="classendtime" />
+  </resultMap>
+ 
+    
+    
+  <sql id="Base_Column_List">
+    actionid, classid, userid, checktime
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from classcheckinfo
+    where actionid = #{actionid,jdbcType=INTEGER}
+  </select>
+  
+  
+  <select id="selectUserAllCheckList" parameterType="java.lang.Integer" resultMap="fullResultMap">
+   SELECT
+	 actionid, e.classid, userid, checktime,  classname, classbegintime ,classendtime
+	FROM
+	(
+		SELECT
+			*
+		FROM
+			classcheckinfo
+		<where>
+		<if test="userid!=null">
+		and	userid = #{userid}
+		</if>
+			<if test="classid!=null">
+			and classid = #{classid}
+			</if>
+			</where>
+		ORDER BY checktime DESC
+	) e
+INNER JOIN (
+	SELECT
+		*
+	FROM
+		classinfo
+	
+	
+) d ON e.classid = d.classid
+  </select> 
+  
+  
+  <select id="SuperselectUserAllCheckList"  resultMap="fullResultMap">
+   SELECT
+	 actionid, e.classid, userid, checktime,  classname, classbegintime ,classendtime
+	FROM
+	(
+		SELECT
+			*
+		FROM
+			classcheckinfo
+		
+		ORDER BY checktime DESC
+	) e
+INNER JOIN (
+	SELECT
+		*
+	FROM
+		classinfo
+	
+	
+) d ON e.classid = d.classid
+  </select> 
+  
+  
+  
+   <select id="selectByUseridAndCalssId"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from classcheckinfo
+    where userid = #{userid,jdbcType=INTEGER}
+    and classid = #{classid,jdbcType=INTEGER}
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from classcheckinfo
+    where actionid = #{actionid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zzq.entity.classcheckinfo">
+    insert into classcheckinfo (classid, userid, 
+      checktime)
+    values ( #{classid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, 
+      #{checktime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zzq.entity.classcheckinfo">
+    insert into classcheckinfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="actionid != null">
+        actionid,
+      </if>
+      <if test="classid != null">
+        classid,
+      </if>
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="checktime != null">
+        checktime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="actionid != null">
+        #{actionid,jdbcType=INTEGER},
+      </if>
+      <if test="classid != null">
+        #{classid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="checktime != null">
+        #{checktime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zzq.entity.classcheckinfo">
+    update classcheckinfo
+    <set>
+      <if test="classid != null">
+        classid = #{classid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        userid = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="checktime != null">
+        checktime = #{checktime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where actionid = #{actionid,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

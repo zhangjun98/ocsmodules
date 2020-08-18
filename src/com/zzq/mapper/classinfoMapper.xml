@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzq.mapper.classinfoMapper">
+  <resultMap id="BaseResultMap" type="com.zzq.entity.classuser">
+    <id column="classid" jdbcType="INTEGER" property="classid" />
+    <result column="classname" jdbcType="VARCHAR" property="classname" />
+    <result column="classbegintime" jdbcType="TIME" property="classbegintime" />
+    <result column="classendtime" jdbcType="TIME" property="classendtime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    classid, classname, classbegintime ,classendtime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from classinfo
+    where classid = #{classid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="UserSelectAllClassList"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from classinfo
+    <where>
+     <if test="classname!=null and classname!=''">
+     and classname like'%${classname}%'
+    </if>
+    </where>
+   
+  </select>
+  
+</mapper>
